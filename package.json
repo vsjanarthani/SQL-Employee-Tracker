@@ -1,0 +1,25 @@
+{
+  "name": "SQL-Employee-Tracker",
+  "version": "1.0.0",
+  "description": "App to track and add/edit employees using MySQL database and inquirer prompt",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vsjanarthani/SQL-Employee-Tracker.git"
+  },
+  "keywords": [],
+  "author": "Janarthani V Subramaniam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vsjanarthani/SQL-Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/vsjanarthani/SQL-Employee-Tracker#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^8.0.0",
+    "mysql2": "^2.2.5"
+  }
+}
