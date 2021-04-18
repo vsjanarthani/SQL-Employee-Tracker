@@ -1,5 +1,5 @@
 -- Inserting values to department table;
-INSERT INTO department (name)
+INSERT INTO department (dep_name)
 VALUES 
 ('Sales'),
 ('Finance'),
@@ -41,7 +41,7 @@ VALUES
 ('Laura', 'Rodriguez', 7, NULL),
 ('Teddy', 'Noah', 8, NULL),
 ('Kamala', 'Venugopal', 13, NULL),
-('Juan', 'Ramirez', 14, NULL),
+('Juan', 'Ramirez', 14, NULL);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
