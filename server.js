@@ -5,7 +5,7 @@ const queries = require('./lib/queries');
 
 
 // Connect to database
-const dbpool = mysql.createPool(
+const pool = mysql.createPool(
     {
         host: 'localhost',
         user: 'janarthani',
@@ -14,12 +14,43 @@ const dbpool = mysql.createPool(
         waitForConnections: true,
         connectionLimit: 10,
         queueLimit: 0
-    });
+    }
+);
+
+const dbpool = pool.promise();
+
+// Function to get manager names
+// const getManagers = (returndata) => {
+//     dbpool.query(queries.getAllManagers, (err, data) => {
+//         if (err) throw err;
+//         let managerlist = [];
+//         for (i = 0; i < data.length; i++) {
+//            managerlist.push(data[i].manager_name);
+//         }
+//         return returndata(managerlist);
+//     });
+// };
+
+async function getManagers() {
+    try {
+        rowdata = await dbpool.query(queries.getAllManagers);
+        let managerlist = [];
+        rowdata = rowdata[0];
+        for (row in rowdata) {
+            managerlist.push(`${rowdata[row].manager_id} ${rowdata[row].manager_name}`);
+        }
+        return managerlist;
+    } catch(err) {
+        console.log(err);
+    }
+}
+
 
 initialPrompt();
 
 // Initial prompt
-function initialPrompt() {
+async function initialPrompt() {
+    let managers = await getManagers();
     inquirer
         .prompt([
             {
@@ -113,10 +144,14 @@ function initialPrompt() {
                 when: ({ choice }) => choice === 'Add an employee'
             },
             {
-                type: 'input',
-                name: 'manager_id',
-                message: "Enter the employee's Manager Id:",
-                when: ({ choice }) => choice === 'Add an employee'
+                type: 'list',
+                name: 'manager_name',
+                message: "Select the employee's Manager:",
+                when: ({ choice }) => choice === 'Add an employee', 
+                choices: [
+                    // populate from db
+                    ...managers
+                ]
             },
             {
                 type: 'input',
@@ -224,12 +259,13 @@ const addNewRole = response => {
 };
 
 // Function to add employee
-const addNewEmp = response => {
-    dbpool.query(queries.addEmp, [response.first_name, response.last_name, response.role_id, response.manager_id], (err, data) => {
+const addNewEmp = async response => {
+    let manager_id = parseInt(response.manager_name.split(' ')[0]);
+   await dbpool.query(queries.addEmp, [response.first_name, response.last_name, response.role_id, manager_id], async (err, data) => {
         if (err) throw err;
         console.log(`Employee ${response.first_name} ${response.last_name} added to the employee table`);
-        getEmps();
-        initialPrompt();
+        await getEmps();
+        await initialPrompt();
     });
 };
 
