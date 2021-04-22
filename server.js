@@ -1,5 +1,4 @@
 const inquirer = require('inquirer');
-const consoleTable = require('console.table');
 const { getDeplist, getDeps, addNewDep, queryDept, deleteDep, budgetbyDep } = require('./lib/Functions/department');
 const { getRoleList, getRoles, addNewRole, queryRoleTitle, deleteRole } = require('./lib/Functions/role');
 const { getManagers, getEmpList, getEmps, addNewEmp, queryEmpName, updEmpRole, queryEmpID, updEmpMgr,
@@ -248,5 +247,3 @@ const displayResult = response => {
             break;
     }
 };
-
-module.exports = { initialPrompt };
