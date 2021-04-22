@@ -3,15 +3,16 @@ const consoleTable = require('console.table');
 const mysql = require('mysql2');
 const queries = require('./lib/queries');
 const { Department, Role, Employee, EmployeebyMgr } = require('./lib/constructor');
-const { getEmpsbyManager } = require('./lib/queries');
+require('dotenv').config();
+
 
 
 // Connect to database
 const pool = mysql.createPool(
     {
         host: 'localhost',
-        user: 'janarthani',
-        password: 'password',
+        user: process.env.USER,
+        password: process.env.PASSWORD,
         database: 'employee_db',
         waitForConnections: true,
         connectionLimit: 10,
@@ -146,7 +147,15 @@ async function initialPrompt() {
                 type: 'input',
                 name: 'salary',
                 message: 'Enter the salary for the role:',
-                when: ({ choice }) => choice === 'Add a role'
+                when: ({ choice }) => choice === 'Add a role',
+                validate: salaryInput => {
+                    if (!Number.isNaN(parseFloat(salaryInput))) {
+                        return true;
+                    } else {
+                        console.log('Please enter a number for salary with a max of 2 decimal value');
+                        return false;
+                    }
+                }
             },
             {
                 type: 'list',
